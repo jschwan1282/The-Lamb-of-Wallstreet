@@ -21,7 +21,7 @@ close = []
 
 for year in range(2017, 2019):
     for month in range(1,13):
-        for day in range(1,31):
+        for day in range(1,32):
             try:
                 start = datetime.date(year, month, day)
                 end = datetime.date((year + 1), month, day)
@@ -88,7 +88,7 @@ for year in range(2017, 2019):
                 # print(confidenceknn)
 
                 #perfrom forecasting
-                forecast_set = clfknn.predict(X_lately)
+                forecast_set = clfpoly3.predict(X_lately)
                 dfreg['Forecast'] = np.nan
                 df_close = df['Close'].iloc[-1]
 
@@ -111,4 +111,5 @@ semi_final = p_merged.rename(columns={'0_x': "date", 0: 'close_price','0_y': 'da
 
 final = semi_final[['date', 'close_price', 'day_1_pred','day_2_pred', 'day_3_pred','day_4_pred','day_5_pred','day_6_pred','day_7_pred', 'day_8_pred',
                                 'day_9_pred', 'day_10_pred', 'day_11_pred', 'day_12_pred', 'day_13_pred']]
-final.to_csv("Data/merged.csv")
+
+final.to_csv("Data/poly3.csv")
