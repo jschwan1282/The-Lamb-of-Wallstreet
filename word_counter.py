@@ -1,11 +1,10 @@
 # %matplotlib inline
 import collections
 import pandas as pd
-import matplotlib.pyplot as plt
 
 # Read input file, note the encoding is specified here 
 # It may be different in your text file
-file = open('Netflix_tweets.txt', encoding="utf8")
+file = open('Data/FINALtext.txt', encoding="utf8")
 a= file.read()
 # Stopwords
 stopwords = set(line.strip() for line in open('stopwords.txt'))
@@ -40,4 +39,4 @@ file.close()
 # Draw a bar chart
 lst = word_counter.most_common(n_print)
 df = pd.DataFrame(lst, columns = ['Word', 'Count'])
-df.plot.bar(x='Word',y='Count')
+df.to_csv("Data/Word_Count.csv", index=False)
