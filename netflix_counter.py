@@ -4,7 +4,7 @@ from mrjob.job import MRJob
 class netflix_count(MRJob):
     def mapper(self, _, line):
         for word in line.split():
-            if word.lower() == "stock":
+            if word.findall() == "stock":
                 yield "stock", 1
 
     def reducer(self, key, values):
