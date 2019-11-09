@@ -1,6 +1,5 @@
 import pandas as pd
 import datetime
-import pandas_datareader.data as web
 from pandas import Series, DataFrame
 import math
 import numpy as np
@@ -19,86 +18,90 @@ period = []
 close = []
 
 
-for year in range(2017, 2019):
-    for month in range(1,13):
-        for day in range(1,32):
-            try:
-                start = datetime.date(year, month, day)
-                end = datetime.date((year + 1), month, day)
+# for year in range(2017, 2019):
+#     for month in range(1,13):
+#         for day in range(1,32):
+#             try:
+#                 start = datetime.date(year, month, day)
+#                 end = datetime.date((year + 1), month, day)
+
+                
             
-                print(f' From period: {start} to {end}')
+#                 print(f' From period: {start} to {end}')
         
                 #get stock Data
-                df = web.DataReader("NFLX", 'yahoo', start, end)
-                print(df)
+df = pd.read_csv('../data/twitter.csv')
 
-                #Convert Data
-                dfreg = df.loc[:,['Adj Close','Volume']]
-                dfreg['HL_PCT'] = (df['High'] - df['Low']) / df['Close'] * 100.0
-                dfreg['PCT_change'] = (df['Close'] - df['Open']) / df['Open'] * 100.0
 
-                # Drop missing value
-                dfreg.fillna(value=-99999, inplace=True)
+#Convert Data
+dfreg = df.loc[:,['close','tweets']]
+dfreg['HL_PCT'] = (df['likes'])
+dfreg['PCT_change'] = (df['close'])
 
-                #select percednt of dtata for forecast into the future currently set to 5%
-                forecast_out = int(math.ceil(0.05 * len(dfreg)))
+# Drop missing value
+dfreg.fillna(value=-99999, inplace=True)
 
-                # Separating the label here, we want to predict the AdjClose
-                forecast_col = 'Adj Close'
-                dfreg['label'] = dfreg[forecast_col].shift(-forecast_out)
-                X = np.array(dfreg.drop(['label'], 1))
+#select percednt of dtata for forecast into the future currently set to 5%
+forecast_out = int(math.ceil(0.05 * len(dfreg)))
 
-                # Scale the X so that everyone can have the same distribution for linear regression
-                X = sklearn.preprocessing.scale(X)
+# Separating the label here, we want to predict the AdjClose
+forecast_col = 'close'
+dfreg['label'] = dfreg[forecast_col].shift(-forecast_out)
+X = np.array(dfreg.drop(['label'], 1))
 
-                # Finally We want to find Data Series of late X and early X (train) for model generation and evaluation
-                X_lately = X[-forecast_out:]
-                X = X[:-forecast_out]
+# Scale the X so that everyone can have the same distribution for linear regression
+X = sklearn.preprocessing.scale(X)
 
-                # Separate label and identify it as y
-                y = np.array(dfreg['label'])
-                y = y[:-forecast_out]
+# Finally We want to find Data Series of late X and early X (train) for model generation and evaluation
+X_lately = X[-forecast_out:]
+X = X[:-forecast_out]
 
-                #set training perameters
-                X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+# Separate label and identify it as y
+y = np.array(dfreg['label'])
+y = y[:-forecast_out]
 
-                # Linear regression
-                clfreg = LinearRegression(n_jobs=-1)
-                clfreg.fit(X_train, y_train)
+#set training perameters
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
 
-                # Quadratic Regression 2
-                clfpoly2 = make_pipeline(PolynomialFeatures(2), Ridge())
-                clfpoly2.fit(X_train, y_train)
+# Linear regression
+clfreg = LinearRegression(n_jobs=-1)
+clfreg.fit(X_train, y_train)
 
-                # Quadratic Regression 3
-                clfpoly3 = make_pipeline(PolynomialFeatures(3), Ridge())
-                clfpoly3.fit(X_train, y_train)
+# Quadratic Regression 2
+clfpoly2 = make_pipeline(PolynomialFeatures(2), Ridge())
+clfpoly2.fit(X_train, y_train)
 
-                # KNN Regression
-                clfknn = KNeighborsRegressor(n_neighbors=2)
-                clfknn.fit(X_train, y_train)
+# Quadratic Regression 3
+clfpoly3 = make_pipeline(PolynomialFeatures(3), Ridge())
+clfpoly3.fit(X_train, y_train)
 
-                confidencereg = clfreg.score(X_test, y_test)
-                confidencepoly2 = clfpoly2.score(X_test,y_test)
-                confidencepoly3 = clfpoly3.score(X_test,y_test)
-                confidenceknn = clfknn.score(X_test, y_test)
+# KNN Regression
+clfknn = KNeighborsRegressor(n_neighbors=2)
+clfknn.fit(X_train, y_train)
 
-                # print(confidencereg)
-                # print(confidencepoly2)
-                # print(confidencepoly3)
-                # print(confidenceknn)
+confidencereg = clfreg.score(X_test, y_test)
+confidencepoly2 = clfpoly2.score(X_test,y_test)
+confidencepoly3 = clfpoly3.score(X_test,y_test)
+confidenceknn = clfknn.score(X_test, y_test)
 
-                #perfrom forecasting
-                forecast_set = clfpoly3.predict(X_lately)
-                dfreg['Forecast'] = np.nan
-                df_close = df['Close'].iloc[-1]
+# print(confidencereg)
+# print(confidencepoly2)
+print(confidencepoly3)
+# print(confidenceknn)
 
-                data.append(forecast_set)
-                period.append(end)
-                close.append(df_close)
+#perfrom forecasting
+forecast_set = clfpoly2.predict(X_lately)
+dfreg['Forecast'] = np.nan
+df_close = df['close'].iloc[-1]
+df_dates = df['dates'].iloc[-1]
+
+
+data.append(forecast_set)
+period.append(df_dates)
+close.append(df_close)
                 
-            except:
-                print("not valid date")
+            # except:
+            #     print("not valid date")
 
 
 today = pd.DataFrame(data)
@@ -113,4 +116,4 @@ semi_final = p_merged.rename(columns={'0_x': "date", 0: 'close_price','0_y': 'da
 final = semi_final[['date', 'close_price', 'day_1_pred','day_2_pred', 'day_3_pred','day_4_pred','day_5_pred','day_6_pred','day_7_pred', 'day_8_pred',
                                 'day_9_pred', 'day_10_pred', 'day_11_pred', 'day_12_pred', 'day_13_pred']]
 
-final.to_csv("Data/t_predicts.csv")
+final.to_csv("../Data/t_predictspoly2.csv")
