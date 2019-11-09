@@ -30,6 +30,7 @@ for year in range(2017, 2019):
         
                 #get stock Data
                 df = web.DataReader("NFLX", 'yahoo', start, end)
+                print(df)
 
                 #Convert Data
                 dfreg = df.loc[:,['Adj Close','Volume']]
@@ -112,4 +113,4 @@ semi_final = p_merged.rename(columns={'0_x': "date", 0: 'close_price','0_y': 'da
 final = semi_final[['date', 'close_price', 'day_1_pred','day_2_pred', 'day_3_pred','day_4_pred','day_5_pred','day_6_pred','day_7_pred', 'day_8_pred',
                                 'day_9_pred', 'day_10_pred', 'day_11_pred', 'day_12_pred', 'day_13_pred']]
 
-final.to_csv("Data/poly3.csv")
+final.to_csv("Data/t_predicts.csv")
