@@ -27,7 +27,7 @@ for index, row in data.iterrows():
             else:
                 x = x + 0
         except:
-            print(f'nul value{i}')
+            print(f'null value{i}')
     t_value.append(x)
     x=0
     
@@ -40,8 +40,5 @@ df = pd.DataFrame({
         'adj_close': adj_close,
         't_value'  : t_value,
 })
-   
-date_group = df.groupby()
-
 
 df.to_csv('../data/word_values.csv', index=False)
