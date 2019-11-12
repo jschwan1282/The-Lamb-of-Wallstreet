@@ -13,96 +13,102 @@ import sklearn.preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 
+
+df = pd.read_csv('../data/final_tweets.csv')
+df['date'] = pd.to_datetime(df['date'])  
+
 data = []
 period = []
 close = []
 
 
-# for year in range(2017, 2019):
-#     for month in range(1,13):
-#         for day in range(1,32):
-#             try:
-#                 start = datetime.date(year, month, day)
-#                 end = datetime.date((year + 1), month, day)
+for year in range(2017, 2019):
+    for month in range(1,13):
+        for day in range(1,32):
+            try:
+                start_date = (f"{month}-{day}-{year}")
+                end_date = (f"{month}-{day}-{(year +1)}")
+                # print("1")
 
+                #get tweet Data
+                df = pd.read_csv('../data/final_tweets.csv')
+                df['date'] = pd.to_datetime(df['date'])  
+                mask = (df['date'] > start_date) & (df['date'] <= end_date)
+                df = df.loc[mask]
+                # print('2')
+                # print(df)
+                print(f'working from: {start_date} to {end_date}')
+                #Convert Data
+                dfreg = df.loc[:,['close','total_tweets']]
+                dfreg['HL_PCT'] = (df['total_likes'])
+                dfreg['PCT_change'] = (df['t_value'])
+
+                # print("3")
+                # Drop missing value
+                dfreg.fillna(value=-99999, inplace=True)
+                # print("4")
+                #select percednt of dtata for forecast into the future currently set to 5
+                forecast_out = int(math.ceil(0.05 * 365))
+                # print("5")
+                # Separating the label here, we want to predict the AdjClose
+                forecast_col = 'close'
+                dfreg['label'] = dfreg[forecast_col].shift(-forecast_out)
+                X = np.array(dfreg.drop(['label'], 1))
+                # print("6")
+                # Scale the X so that everyone can have the same distribution for linear regression
+                X = sklearn.preprocessing.scale(X)
+                # print('7')
+                # Finally We want to find Data Series of late X and early X (train) for model generation and evaluation
+                X_lately = X[-forecast_out:]
+                X = X[:-forecast_out]
+                # print('8')
+                # Separate label and identify it as y
+                y = np.array(dfreg['label'])
+                y = y[:-forecast_out]
+                # print('9')
+                #set training perameters
+                X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+                # print('10')
+                # Linear regression
+                clfreg = LinearRegression(n_jobs=-1)
+                clfreg.fit(X_train, y_train)
+                # print('11')
+                # Quadratic Regression 2
+                clfpoly2 = make_pipeline(PolynomialFeatures(2), Ridge())
+                clfpoly2.fit(X_train, y_train)
+                # print('12')
+                # Quadratic Regression 3
+                clfpoly3 = make_pipeline(PolynomialFeatures(3), Ridge())
+                clfpoly3.fit(X_train, y_train)
+                # print('13')
+                # KNN Regression
+                clfknn = KNeighborsRegressor(n_neighbors=2)
+                clfknn.fit(X_train, y_train)
+                # print('14')
+                confidencereg = clfreg.score(X_test, y_test)
+                confidencepoly2 = clfpoly2.score(X_test,y_test)
+                confidencepoly3 = clfpoly3.score(X_test,y_test)
+                confidenceknn = clfknn.score(X_test, y_test)
+                # print('15')
+               
+
+                #perfrom forecasting
+                forecast_set = clfknn.predict(X_lately)
+                dfreg['Forecast'] = np.nan
+                df_close = df['close'].iloc[-1]
+                df_dates = df['date'].iloc[-1]
+                # print('16')
+
+                data.append(forecast_set)
+                period.append(df_dates)
+                close.append(df_close)
                 
-            
-#                 print(f' From period: {start} to {end}')
-        
-                #get stock Data
-df = pd.read_csv('../data/twitter.csv')
-
-
-#Convert Data
-dfreg = df.loc[:,['close','tweets']]
-dfreg['HL_PCT'] = (df['likes'])
-dfreg['PCT_change'] = (df['close'])
-
-# Drop missing value
-dfreg.fillna(value=-99999, inplace=True)
-
-#select percednt of dtata for forecast into the future currently set to 5%
-forecast_out = int(math.ceil(0.05 * len(dfreg)))
-
-# Separating the label here, we want to predict the AdjClose
-forecast_col = 'close'
-dfreg['label'] = dfreg[forecast_col].shift(-forecast_out)
-X = np.array(dfreg.drop(['label'], 1))
-
-# Scale the X so that everyone can have the same distribution for linear regression
-X = sklearn.preprocessing.scale(X)
-
-# Finally We want to find Data Series of late X and early X (train) for model generation and evaluation
-X_lately = X[-forecast_out:]
-X = X[:-forecast_out]
-
-# Separate label and identify it as y
-y = np.array(dfreg['label'])
-y = y[:-forecast_out]
-
-#set training perameters
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
-
-# Linear regression
-clfreg = LinearRegression(n_jobs=-1)
-clfreg.fit(X_train, y_train)
-
-# Quadratic Regression 2
-clfpoly2 = make_pipeline(PolynomialFeatures(2), Ridge())
-clfpoly2.fit(X_train, y_train)
-
-# Quadratic Regression 3
-clfpoly3 = make_pipeline(PolynomialFeatures(3), Ridge())
-clfpoly3.fit(X_train, y_train)
-
-# KNN Regression
-clfknn = KNeighborsRegressor(n_neighbors=2)
-clfknn.fit(X_train, y_train)
-
-confidencereg = clfreg.score(X_test, y_test)
-confidencepoly2 = clfpoly2.score(X_test,y_test)
-confidencepoly3 = clfpoly3.score(X_test,y_test)
-confidenceknn = clfknn.score(X_test, y_test)
-
+            except:
+                print("not valid date")
 # print(confidencereg)
 # print(confidencepoly2)
-print(confidencepoly3)
-# print(confidenceknn)
-
-#perfrom forecasting
-forecast_set = clfpoly2.predict(X_lately)
-dfreg['Forecast'] = np.nan
-df_close = df['close'].iloc[-1]
-df_dates = df['dates'].iloc[-1]
-
-
-data.append(forecast_set)
-period.append(df_dates)
-close.append(df_close)
-                
-            # except:
-            #     print("not valid date")
-
+# print(confidencepoly3)
+print(confidenceknn)
 
 today = pd.DataFrame(data)
 P_dates = pd.DataFrame(period)
@@ -116,4 +122,4 @@ semi_final = p_merged.rename(columns={'0_x': "date", 0: 'close_price','0_y': 'da
 final = semi_final[['date', 'close_price', 'day_1_pred','day_2_pred', 'day_3_pred','day_4_pred','day_5_pred','day_6_pred','day_7_pred', 'day_8_pred',
                                 'day_9_pred', 'day_10_pred', 'day_11_pred', 'day_12_pred', 'day_13_pred']]
 
-final.to_csv("../Data/t_predictspoly2.csv")
+final.to_csv("../Data/Predictions/t_knn.csv", index=False)
