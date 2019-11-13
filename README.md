@@ -36,7 +36,7 @@ L – Load:
 •	Ran data through deep learning methods (Linear Regression, KNN, Quadratic - 2 & 3 Polynomials)
 •	Visualization loaded into Tableau
 
-<b><#>links:</#></b></br>
+<b><h1>links:</h1></b></br>
 <b>Presentation:</b> </br>
 https://docs.google.com/presentation/d/15IJaAgMvJi5bY7gW_OLuJaHFoaTzk8gDxktbXH579bY/edit#slide=id.p </br>
 Twitter predicitons:</br>
