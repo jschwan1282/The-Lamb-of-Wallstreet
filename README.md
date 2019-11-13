@@ -37,7 +37,7 @@ L – Load:
 •	Visualization loaded into Tableau
 
 links:
-Presentation: </br>
+<b>Presentation:</b> </br>
 https://docs.google.com/presentation/d/15IJaAgMvJi5bY7gW_OLuJaHFoaTzk8gDxktbXH579bY/edit#slide=id.p </br>
 Twitter predicitons:</br>
 https://public.tableau.com/profile/charles.august.lindner#!/vizhome/tweet_predictions/Story1?publish=yes </br>
