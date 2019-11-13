@@ -36,4 +36,16 @@ L – Load:
 •	Ran data through deep learning methods (Linear Regression, KNN, Quadratic - 2 & 3 Polynomials)
 •	Visualization loaded into Tableau
 
+links:
+Presentation:
+https://docs.google.com/presentation/d/15IJaAgMvJi5bY7gW_OLuJaHFoaTzk8gDxktbXH579bY/edit#slide=id.p
+Twitter predicitons:
+https://public.tableau.com/profile/charles.august.lindner#!/vizhome/tweet_predictions/Story1?publish=yes
+Stock Prediciton - knn model:
+https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofKNN/Story1
+Stock Prediction - Poly2 model:
+https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofPoly2/Story1
+Stock Prediction - Poly3 model:
+
+Stock Prediction - Linear regression model:
 
