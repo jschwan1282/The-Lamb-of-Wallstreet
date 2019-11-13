@@ -46,6 +46,6 @@ https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofKNN/Story1 
 Stock Prediction - Poly2 model:</br>
 https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofPoly2/Story1 </br>
 Stock Prediction - Poly3 model:</br>
-
+https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofPoly3/Story1 </br>
 Stock Prediction - Linear regression model:</br>
 
