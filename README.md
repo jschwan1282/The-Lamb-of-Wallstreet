@@ -39,13 +39,13 @@ L – Load:
 links:
 Presentation: </br>
 https://docs.google.com/presentation/d/15IJaAgMvJi5bY7gW_OLuJaHFoaTzk8gDxktbXH579bY/edit#slide=id.p
-Twitter predicitons: </br>
+Twitter predicitons:</br>
 https://public.tableau.com/profile/charles.august.lindner#!/vizhome/tweet_predictions/Story1?publish=yes
 Stock Prediciton - knn model:</br>
 https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofKNN/Story1
-Stock Prediction - Poly2 model: </br>
+Stock Prediction - Poly2 model:</br>
 https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofPoly2/Story1
-Stock Prediction - Poly3 model: </br>
+Stock Prediction - Poly3 model:</br>
 
 Stock Prediction - Linear regression model:</br>
 
