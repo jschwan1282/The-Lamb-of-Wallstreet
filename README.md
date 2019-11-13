@@ -37,9 +37,9 @@ L – Load:
 •	Visualization loaded into Tableau
 
 links:
-Presentation:
+Presentation: </br>
 https://docs.google.com/presentation/d/15IJaAgMvJi5bY7gW_OLuJaHFoaTzk8gDxktbXH579bY/edit#slide=id.p
-Twitter predicitons:
+Twitter predicitons: </br>
 https://public.tableau.com/profile/charles.august.lindner#!/vizhome/tweet_predictions/Story1?publish=yes
 Stock Prediciton - knn model:
 https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofKNN/Story1
