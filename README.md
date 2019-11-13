@@ -40,7 +40,7 @@ links:</br>
 <b>Presentation:</b> </br>
 https://docs.google.com/presentation/d/15IJaAgMvJi5bY7gW_OLuJaHFoaTzk8gDxktbXH579bY/edit#slide=id.p </br>
 Twitter predicitons:</br>
-https://public.tableau.com/profile/charles.august.lindner#!/vizhome/tweet_predictions/Story1?publish=yes </br>
+https://public.tableau.com/profile/charles.august.lindner#!/vizhome/tweet_predictions/TMC?publish=yes </br>
 Stock Prediciton - knn model:</br>
 https://public.tableau.com/profile/lacy.williams#!/vizhome/TheStoryofKNN/Story1 </br>
 Stock Prediction - Poly2 model:</br>
